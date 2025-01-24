@@ -151,69 +151,69 @@ class Command(BaseCommand):
         Decouple the submodule from the repository and turn it into a regular directory.
         """
         try:
-            # Remove the submodule from Git index
-            subprocess.run(
-                ["git", "rm", "--cached", app_name],
-                cwd=root_dir,
-                check=True,
-            )
-            self.stdout.write(
-                self.style.SUCCESS(f"Removed submodule references for '{app_name}'.")
-            )
+            # # Remove the submodule from Git index
+            # subprocess.run(
+            #     ["git", "rm", "--cached", app_name],
+            #     cwd=root_dir,
+            #     check=True,
+            # )
+            # self.stdout.write(
+            #     self.style.SUCCESS(f"Removed submodule references for '{app_name}'.")
+            # )
 
-            # Remove from .gitmodules
-            subprocess.run(
-                [
-                    "git",
-                    "config",
-                    "--file",
-                    ".gitmodules",
-                    "--remove-section",
-                    f"submodule.{app_name}",
-                ],
-                cwd=root_dir,
-                check=True,
-            )
+            # # Remove from .gitmodules
+            # subprocess.run(
+            #     [
+            #         "git",
+            #         "config",
+            #         "--file",
+            #         ".gitmodules",
+            #         "--remove-section",
+            #         f"submodule.{app_name}",
+            #     ],
+            #     cwd=root_dir,
+            #     check=True,
+            # )
 
-            # Remove from .git/config
-            subprocess.run(
-                ["git", "config", "--remove-section", f"submodule.{app_name}"],
-                cwd=root_dir,
-                check=True,
-            )
+            # # Remove from .git/config
+            # subprocess.run(
+            #     ["git", "config", "--remove-section", f"submodule.{app_name}"],
+            #     cwd=root_dir,
+            #     check=True,
+            # )
 
-            # Remove the .git directory inside the submodule if it exists
-            submodule_path = root_dir / app_name
-            git_dir = submodule_path / ".git"
-            if git_dir.exists() and git_dir.is_dir():
-                subprocess.run(["rm", "-rf", str(git_dir)], check=True)
-                self.stdout.write(
-                    self.style.SUCCESS(
-                        f"Removed the .git directory from '{submodule_path}'."
-                    )
-                )
-            else:
-                self.stdout.write(
-                    self.style.WARNING(
-                        f"No .git directory found in '{submodule_path}'."
-                    )
-                )
+            # # Remove the .git directory inside the submodule if it exists
+            # submodule_path = root_dir / app_name
+            # git_dir = submodule_path / ".git"
+            # if git_dir.exists() and git_dir.is_dir():
+            #     subprocess.run(["rm", "-rf", str(git_dir)], check=True)
+            #     self.stdout.write(
+            #         self.style.SUCCESS(
+            #             f"Removed the .git directory from '{submodule_path}'."
+            #         )
+            #     )
+            # else:
+            #     self.stdout.write(
+            #         self.style.WARNING(
+            #             f"No .git directory found in '{submodule_path}'."
+            #         )
+            #     )
 
-            # Remove the submodule from .git/modules
-            modules_dir = root_dir / ".git" / "modules" / app_name
-            if modules_dir.exists() and modules_dir.is_dir():
-                subprocess.run(["rm", "-rf", str(modules_dir)], check=True)
-                self.stdout.write(
-                    self.style.SUCCESS(
-                        f"Removed the submodule directory from '.git/modules/{app_name}'."
-                    )
-                )
-            else:
-                self.stdout.write(
-                    self.style.WARNING(
-                        f"No submodule directory found in '.git/modules/{app_name}'."
-                    )
-                )
+            # # Remove the submodule from .git/modules
+            # modules_dir = root_dir / ".git" / "modules" / app_name
+            # if modules_dir.exists() and modules_dir.is_dir():
+            #     subprocess.run(["rm", "-rf", str(modules_dir)], check=True)
+            #     self.stdout.write(
+            #         self.style.SUCCESS(
+            #             f"Removed the submodule directory from '.git/modules/{app_name}'."
+            #         )
+            #     )
+            # else:
+            #     self.stdout.write(
+            #         self.style.WARNING(
+            #             f"No submodule directory found in '.git/modules/{app_name}'."
+            #         )
+            #     )
 
             # If the directory exists but the submodule is being re-added, delete it
             if submodule_path.exists() and not git_dir.exists():
