@@ -215,13 +215,19 @@ class Command(BaseCommand):
                     )
                 )
 
-            # Add the directory back to Git's staging area
-            subprocess.run(["git", "add", str(submodule_path)], cwd=root_dir, check=True)
-            self.stdout.write(
-                self.style.SUCCESS(
-                    f"Added '{submodule_path}' as a regular directory to the Git repository."
+            # If the directory exists but the submodule is being re-added, delete it
+            if submodule_path.exists() and not git_dir.exists():
+                self.stdout.write(
+                    self.style.WARNING(
+                        f"Directory '{submodule_path}' exists but is not a submodule. Removing it to avoid conflicts..."
+                    )
                 )
-            )
+                subprocess.run(["rm", "-rf", str(submodule_path)], check=True)
+                self.stdout.write(
+                    self.style.SUCCESS(
+                        f"Removed the existing directory '{submodule_path}'."
+                    )
+                )
 
         except subprocess.CalledProcessError as e:
             self.stderr.write(

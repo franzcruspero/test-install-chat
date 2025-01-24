@@ -1,4 +1,0 @@
-[submodule "chat"]
-	path = chat
-	url = git@github.com:mugna-tech/django-chat-blueprint.git
-	branch = quickfix/update-routing-and-readme
