@@ -1,0 +1,107 @@
+services:
+    web:
+        container_name: test_install_chat_web
+        tty: true
+        stdin_open: true
+        build:
+          context: .
+        restart: always
+        volumes:
+            - .:/web
+            - static_volume:/web/staticfiles
+            - media_volume:/web/media
+        ports:
+            - 8000:8000
+        env_file: .env
+        command: bash -c "uv run uvicorn test_install_chat.asgi:application --host 0.0.0.0 --port 8000"
+        depends_on:
+          db:
+            condition: service_healthy
+    db:
+        restart: always
+        image: postgres:14.0
+        environment:
+          - POSTGRES_USER=test_install_chat
+          - POSTGRES_PASSWORD=test_install_chat
+          - POSTGRES_DB=test_install_chat
+        expose:
+          - 5432
+        volumes:
+          - "test_install_chat_db_data:/var/lib/postgresql/data"
+        ports:
+          - 5432:5432
+        healthcheck:
+          test: ["CMD-SHELL", "pg_isready -U test_install_chat"]
+          interval: 5s
+          timeout: 5s
+          retries: 5
+    nginx-proxy:
+        container_name: nginx-proxy
+        build: nginx
+        restart: always
+        ports:
+          - 443:443
+          - 80:80
+        volumes:
+          - static_volume:/web/staticfiles
+          - media_volume:/web/media
+          - certs:/etc/nginx/certs
+          - html:/usr/share/nginx/html
+          - vhost:/etc/nginx/vhost.d
+          - /var/run/docker.sock:/tmp/docker.sock:ro
+        depends_on:
+          - web
+    acme-companion:
+        image: nginxproxy/acme-companion
+        restart: always
+        env_file:
+          - ./.env.proxy-companion
+        volumes:
+          - /var/run/docker.sock:/var/run/docker.sock:ro
+          - certs:/etc/nginx/certs
+          - html:/usr/share/nginx/html
+          - vhost:/etc/nginx/vhost.d
+          - acme:/etc/acme.sh
+        depends_on:
+          - nginx-proxy
+
+
+    mailpit:
+        image: axllent/mailpit
+        volumes:
+          - ./data:/data
+        ports:
+            - 1025:1025 # SMTP Server
+            - 8025:8025 # Mailpit UI
+        restart: unless-stopped
+        environment:
+              MP_MAX_MESSAGES: 5000
+              MP_DATABASE: /data/mailpit.db
+              MP_SMTP_AUTH_ACCEPT_ANY: 1
+              MP_SMTP_AUTH_ALLOW_INSECURE: 1
+
+    redis:
+        container_name: test_install_chat_redis
+        image: redis:alpine
+        restart: always
+
+    celery:
+        container_name: test_install_chat_celery
+        depends_on:
+            - web
+            - redis
+        build:
+          context: .
+        restart: always
+        volumes:
+            - .:/web
+        env_file: .env
+        command: bash -c "uv run celery -A test_install_chat worker --beat --loglevel=info"
+volumes:
+    test_install_chat_db_data:
+    static_volume:
+    media_volume:
+    certs:
+    html:
+    vhost:
+    acme:

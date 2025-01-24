@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+{% load static %}
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office">
+{% block content %}
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inter">
+    <style type="text/css">
+        #outlook a {
+            padding: 0;
+        }
+
+        .ReadMsgBody {
+            width: 100%;
+        }
+
+        .ExternalClass {
+            width: 100%;
+        }
+
+        .ExternalClass * {
+            line-height: 100%;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            -webkit-text-size-adjust: 100%;
+            -ms-text-size-adjust: 100%;
+        }
+
+        table,
+        td {
+            border-collapse: collapse;
+            mso-table-lspace: 0pt;
+            mso-table-rspace: 0pt;
+        }
+
+        img {
+            border: 0;
+            height: auto;
+            line-height: 100%;
+            outline: none;
+            text-decoration: none;
+            -ms-interpolation-mode: bicubic;
+        }
+
+        p {
+            display: block;
+            margin: 13px 0;
+        }
+    </style>
+    <style type="text/css">
+        @media only screen and (max-width:700px) {
+            img {
+                height: auto !important;
+                max-width: 100% !important;
+            }
+            @-ms-viewport {
+                width: 320px;
+            }
+            @viewport {
+                width: 320px;
+            }
+        }
+    </style>
+    <style type="text/css">
+        @media only screen and (min-width:700px) {
+            .mj-column-per-100 {
+                width: 100% !important;
+            }
+        }
+    </style>
+</head>
+
+<body style="background-color:#f9f9f9;">
+    <div style="background-color:#f9f9f9;">
+        <div style="background:#f9f9f9;background-color:#f9f9f9;margin:0px auto;max-width:700px;max-height:825px;">
+
+            <table align="center" border="0" cellpadding="0" cellspacing="0" role="presentation" style="background:#f9f9f9;background-color:#f9f9f9;width:100%;">
+                <tbody>
+                    <tr>
+                        <td style="direction:ltr;font-size:0px;padding:20px 0;text-align:center;vertical-align:top;">
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+        </div>
+        <div style="background:#fff;background-color:#fff;margin:0px auto;max-width:700px;max-height:825px;">
+
+            <table align="center" border="0" cellpadding="0" cellspacing="0" role="presentation" style="background:#fff;background-color:#fff;width:100%;">
+                <tbody>
+                    <tr>
+                        <td style="box-shadow: 0px 4px 12px rgba(194, 206, 214, 0.2); direction:ltr;font-size:0px;text-align:center;vertical-align:top;">
+                                <table border="0" cellpadding="0" cellspacing="0" role="presentation" style="vertical-align:bottom;" width="100%">
+                                    <tr align="left" style="position:relative;">
+                                        <td>
+                                            <img src="{{ current_site }}/static/email/blueprint-email-icon-upper.png" style="display:block;width: 150px;height:150px;""/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td align="center" style="font-size:0px;word-break:break-word;">
+                                            <table align="center" border="0" cellpadding="0" cellspacing="0" role="presentation" style="border-collapse:collapse;border-spacing:0px;">
+                                                <tbody>
+                                                    <tr>
+                                                        <td style="width:139px;height:52px;">
+                                                            <img src="{{ current_site }}/static/email/mugna-logo-raw-1.png" style="border:0;display:block;outline:none;text-decoration:none;width:100%;"/>
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td align="center" style="font-size:0px;padding:10px 25px;padding-bottom:20px;word-break:break-word;">
+                                            <div class="Inter_font" style="font-family: 'Inter', sans-serif; font-style: semi-bold;font-size:32px;font-weight:600;line-height:150%;text-align:center;color:#000000;padding-top:30px;">
+                                               Contact Us Submission
+                                            </div>
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+                                        <td align="center" style="font-size:0px;padding:10px 65px;Sord-break:break-word;">
+
+                                            <div style="font-family: 'Inter', sans-serif; font-style: normal; font-weight:400;font-size:16px;line-height:19.36px;text-align:left;color:#374151;">
+                                                {% if user.is_authenticated %}
+                                                Hi Admin, <br><br>
+                                                A new Contact Us Submission has been received with the following information:
+                                                {% endif %}
+                                            </div>
+
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td align="center" style="font-size:0px;padding:10px 65px;padding-bottom:20px;word-break:break-word;">
+                                            <div style="font-family: 'Inter', sans-serif; font-style: normal; font-weight:400;font-size:16px;line-height:19.36px;text-align:left;color:#374151;">
+                                                Date and Time Submitted:<br>
+                                                <b>{{ date_time_submitted }}</b>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td align="center" style="font-size:0px;padding:10px 65px;padding-bottom:20px;word-break:break-word;">
+                                            <div style="font-family: 'Inter', sans-serif; font-style: normal; font-weight:400;font-size:16px;line-height:19.36px;text-align:left;color:#374151;">
+                                               Name:<br>
+                                                <b>{{ name }}</b>
+                                            </div>
+                                        </td>
+                                    </tr>
+<tr>
+                                        <td align="center" style="font-size:0px;padding:10px 65px;padding-bottom:20px;word-break:break-word;">
+                                            <div style="font-family: 'Inter', sans-serif; font-style: normal; font-weight:400;font-size:16px;line-height:19.36px;text-align:left;color:#374151;">
+                                                Email:<br>
+                                                <b>{{ email_address }}</b>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td align="center" style="font-size:0px;padding:10px 65px;padding-bottom:20px;word-break:break-word;">
+                                            <div style="font-family: 'Inter', sans-serif; font-style: normal; font-weight:400;font-size:16px;line-height:19.36px;text-align:left;color:#374151;">
+                                                Phone:<br>
+                                                <b>{{ phone_number }}</b>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td align="center" style="font-size:0px;padding:10px 65px;padding-bottom:20px;word-break:break-word;">
+                                            <div style="font-family: 'Inter', sans-serif; font-style: normal; font-weight:400;font-size:16px;line-height:19.36px;text-align:left;color:#374151;">
+                                                Message:<br>
+                                                <b>{{ message }}</b>
+                                            </div>
+                                        </td>
+                                    </tr>
+             
+                                    <tr>
+                                        <td align="center" style="font-size:0px;padding:10px 65px;Sord-break:break-word;">
+
+
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td align="right" style="position: relative;">
+                                            <!-- Lower-right Logo -->
+                                            <img src="{{ current_site }}static/email/blueprint-email-icon-lower.png" alt="Lower Right Logo" style="width:100%;max-width:312px;display:block;"/>
+                                        </td>
+                                    </tr>
+                                </table>
+
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+        </div>
+        <div style="margin:0px auto;max-width:600px;">
+
+            <table align="center" border="0" cellpadding="0" cellspacing="0" role="presentation" style="width:100%;">
+                <tbody>
+                    <tr>
+                        <td style="direction:ltr;font-size:0px;padding:20px 0;text-align:center;vertical-align:top;">
+                            <div class="mj-column-per-100 outlook-group-fix" style="font-size:13px;text-align:left;direction:ltr;display:inline-block;vertical-align:bottom;width:100%;">
+
+                                <table border="0" cellpadding="0" cellspacing="0" role="presentation" width="100%">
+                                    <tbody>
+                                        <tr>
+                                            <td style="vertical-align:bottom;padding:0;">
+
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+        </div>
+    </div>
+
+</body>
+{% endblock %}
+</html>

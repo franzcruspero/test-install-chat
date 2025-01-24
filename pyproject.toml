@@ -1,0 +1,115 @@
+[project]
+name = "test_install_chat"
+version = "0.1.0"
+description = "A Mugna Project"
+readme = "README.md"
+authors = [
+    { name = "Lorence Lim", email = "jlorencelim@gmail.com" }
+]
+
+dependencies = [ 
+    "celery>=5.4.0",
+    "coreapi>=2.3.3",
+    "Django>=5.1.1",
+    "dj-rest-auth>=5.0.2",
+    "django-allauth>=0.61.1",
+    "django-celery-beat>=2.5.0",
+    "django-celery-results>=2.5.1",
+    "django-constance[redis]>=4.1.2",
+    "django-cors-headers>=4.3.1",
+    "django-environ>=0.11.2",
+    "django-extensions>=3.2.3",
+    "django-oauth-toolkit>=3.0.1",
+    "django-phonenumber-field>=8.0.0",
+    "django-redis>=5.4.0",
+    "django-restql>=0.15.4",
+    "django-unfold>=0.40.0",
+    "djangorestframework>=3.14.0",
+    "djangorestframework-simplejwt>=5.3.1",
+    "drf-yasg>=1.21.7",
+    "Pillow>=10.4.0",
+    "phonenumbers>=8.13.47",
+    "psycopg2-binary>=2.9.9",
+    "requests-oauthlib>=2.0.0",
+    "setuptools>=75.1.0",
+    "uvicorn>=0.27.0",
+    "whitenoise>=6.6.0",
+    "drf-extensions>=0.7.1",
+]
+requires-python = ">=3.12.2"
+
+[project.optional-dependencies]
+dev = [
+    "coverage[toml]>=7.6.1",
+    "django-coverage-plugin>=3.1.0",
+    "factory-boy>=3.3.0",
+    "ipdb>=0.13.13",
+    "pytest>=8.3.3",
+    "pytest-cov>=4.1.0",
+    "pytest-django>=4.8.0",
+    "pytest-factoryboy>=2.7.0",
+]
+
+lint = [
+    "black>=23.12.1",
+    "pre-commit>=3.6.0",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.uv]
+package = true
+
+[tool.hatch.build.targets.wheel]
+packages = ["."]
+
+# pytest
+[tool.pytest.ini_options]
+DJANGO_SETTINGS_MODULE = "test_install_chat.settings"
+
+
+# isort
+[tool.isort]
+line_length = 88
+profile = "black"
+known_django = "django"
+sections = [
+    "FUTURE",
+    "STDLIB",
+    "THIRDPARTY",
+    "DJANGO",
+    "FIRSTPARTY",
+    "LOCALFOLDER",
+]
+multi_line_output = 3
+skip_glob = "**/migrations/*.py"
+include_trailing_comma = true
+force_grid_wrap = 0
+use_parentheses = true
+
+
+# coverage
+[tool.coverage.run]
+omit = [
+    "*migrations*",
+    "*tests*",
+    "*staticfiles*",
+    "*__init__.py",
+    "test_install_chat/*",
+    "conftest.py",
+    "manage.py",
+]
+plugins = ["django_coverage_plugin"]
+
+[tool.coverage.report]
+omit = [
+    "*migrations*",
+    "*tests*",
+    "*staticfiles*",
+    "*__init__.py",
+    "test_install_chat/*",
+    "conftest.py",
+    "manage.py",
+]

@@ -1,0 +1,117 @@
+version: 2.1
+# Define the jobs we want to run for this project
+jobs:
+  build-and-test:
+    working_directory: ~/test_install_chat
+    docker:
+      - image: cimg/python:3.12.2
+        environment:
+          SECRET_KEY: Thi$IsMyT3$t$3cr3tK3y
+      - image: postgres:14
+        environment:
+          POSTGRES_USER: "test_install_chat"
+          POSTGRES_DB: "test_install_chat"
+          POSTGRES_PASSWORD: "test_install_chat"
+      - image: cimg/redis:6.2.6
+
+    steps:
+      - checkout
+      - run:
+          name: Installing BE Requirements
+          command: |
+            # cp .env.example .env
+            DATABASE_URL=$DATABASEURL
+            UV_LINK_MODE=copy
+            UV_COMPILE_BYTECODE=1
+            UV_PYTHON_DOWNLOADS=never
+            UV_PROJECT_ENVIRONMENT=/home/circleci/blueprint/.venv
+
+            curl -LsSf https://astral.sh/uv/0.5.2/install.sh | sh
+            uv sync --all-extras
+      - run:
+          name: Running BE Test
+          command: |
+            uv run python manage.py migrate
+            uv run pytest
+
+  update-backend:
+    working_directory: ~/test_install_chat
+    docker:
+      - image: arvindr226/alpine-ssh
+    steps:
+      - checkout
+      - run:
+          name: Copy project to instance
+          command: |
+            scp -oStrictHostKeyChecking=no -r ./* $USER@$IP:~/test_install_chat
+
+      # Path specified below will depend where the project folder is saved in the server.
+      - run:
+          name: Clone and update project
+          command: |
+
+            ssh -oStrictHostKeyChecking=no -v $USER@$IP \<< 'EOF'
+
+            cd $HOME/test_install_chat
+
+            docker compose down
+            docker compose up --build -d
+            docker compose exec web python manage.py migrate
+            docker compose exec web python manage.py collectstatic --no-input
+            docker compose restart
+            docker system prune -f # remove unused images for space optimization
+                # Optionally, add more commands (e.g., restarting services)
+            EOF
+
+  # update-backend-prod:
+  #   working_directory: ~/test_install_chat
+  #   docker:
+  #     - image: arvindr226/alpine-ssh
+  #   steps:
+  #     - checkout
+  #     - run:
+  #         name: Copy project to instance
+  #         command: |
+  #           scp -oStrictHostKeyChecking=no -r ./* $STAGINGUSER@$IPSTAGING:~/test_install_chat
+  #           scp -oStrictHostKeyChecking=no -r .env.example $STAGINGUSER@$IPSTAGING:~/test_install_chat/.env
+  #
+  #     # Path specified below will depend where the project folder is saved in the server.
+  #     - run:
+  #         name: Clone and update project
+  #         command: |
+  #
+  #           ssh -oStrictHostKeyChecking=no -v $STAGINGUSER@$IPSTAGING \<< 'EOF'
+  #
+  #           cd $HOME/test_install_chat
+  #
+  #           docker compose down
+  #           docker compose up --build -d
+  #           docker compose exec web python manage.py migrate
+  #           docker compose exec web python manage.py collectstatic --no-input
+  #               # Optionally, add more commands (e.g., restarting services)
+  #           EOF
+
+# Main circleci config for Job flow.
+workflows:
+  version: 2
+  build-project:
+    jobs:
+      - build-and-test:
+          filters:
+            branches:
+              only:
+                - output-blueprint
+      - update-backend:
+          requires:
+            - build-and-test
+          filters:
+            branches:
+              only:
+                - output-blueprint
+      # - update-backend-prod:
+      #     requires:
+      #       - build-and-test
+      #     filters:
+      #       branches:
+      #         only:
+      #           - output-prod
